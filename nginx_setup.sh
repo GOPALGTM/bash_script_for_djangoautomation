@@ -1,17 +1,18 @@
 #!/bin/bash
 
 # Read the application name as an argument
-APP_NAME=$1
+LINUX_USER=$1
+PROJECT_NAME=$3
 
 # Create Nginx configuration file
-sudo tee /etc/nginx/sites-available/$APP_NAME <<EOF
+sudo tee /etc/nginx/sites-available/$PROJECT_NAME <<EOF
 server {
     listen 80;
     server_name 35.154.170.167;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /staticfiles/ {
-        root /home/trigger/project/demo;
+        root /home/$LINUX_USER/$PROJECT_NAME;
     }
 
     location / {
@@ -22,7 +23,7 @@ server {
 EOF
 
 # Enable Nginx configuration
-sudo ln -s /etc/nginx/sites-available/$APP_NAME /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/$PROJECT_NAME /etc/nginx/sites-enabled/
 
 # Test Nginx configuration
 sudo nginx -t
@@ -31,4 +32,4 @@ sudo nginx -t
 sudo systemctl restart nginx
 
 sudo ufw delete allow 8000
-sudo ufw allow 'Nginx Full'sss
+sudo ufw allow 'Nginx Full'

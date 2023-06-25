@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Read the application name as an argument
-APP_NAME=$1
+LINUX_USER=$1
+PROJECT_NAME=$3
 
-#create Gunicorn socke6 file
+#create Gunicorn socket file
 sudo tee /etc/systemd/system/gunicorn.socket <<EOF
 [Unit]
 Description=gunicorn socket
@@ -23,14 +24,14 @@ Requires=gunicorn.socket
 After=network.target
 
 [Service]
-User=trigger
+User=$LINUX_USER
 Group=www-data
-WorkingDirectory=/home/trigger/project/$APP_NAME
-ExecStart=/home/trigger/project/env/bin/gunicorn \
+WorkingDirectory=/home/$LINUX_USER/$PROJECT_NAME
+ExecStart=/home/$LINUX_USER/$PROJECT_NAME/env/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
           --bind unix:/run/gunicorn.sock \
-          demo.wsgi:application
+          $PROJECT_NAME.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
