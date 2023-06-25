@@ -2,7 +2,8 @@
 
 # Read the application name as an argument
 LINUX_USER=$1
-PROJECT_NAME=$2
+REPO_NAME=$2
+PROJECT_NAME=$3
 
 # Create Nginx configuration file
 sudo tee /etc/nginx/sites-available/$PROJECT_NAME <<EOF
@@ -12,7 +13,7 @@ server {
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /staticfiles/ {
-        root /home/$LINUX_USER/$PROJECT_NAME;
+        root /home/$LINUX_USER/$REPO_NAME;
     }
 
     location / {

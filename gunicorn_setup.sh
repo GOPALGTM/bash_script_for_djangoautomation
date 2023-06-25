@@ -2,7 +2,8 @@
 
 # Read the application name as an argument
 LINUX_USER=$1
-PROJECT_NAME=$2
+REPO_NAME=$2
+PROJECT_NAME=$3
 
 #create Gunicorn socket file
 sudo tee /etc/systemd/system/gunicorn.socket <<EOF
@@ -26,8 +27,8 @@ After=network.target
 [Service]
 User=$LINUX_USER
 Group=www-data
-WorkingDirectory=/home/$LINUX_USER/$PROJECT_NAME
-ExecStart=/home/$LINUX_USER/$PROJECT_NAME/env/bin/gunicorn \
+WorkingDirectory=/home/$LINUX_USER/$REPO_NAME
+ExecStart=/home/$LINUX_USER/$REPO_NAME/env/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
           --bind unix:/run/gunicorn.sock \
