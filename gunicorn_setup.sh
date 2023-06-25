@@ -2,7 +2,7 @@
 
 # Read the application name as an argument
 LINUX_USER=$1
-PROJECT_NAME=$3
+PROJECT_NAME=$2
 
 #create Gunicorn socket file
 sudo tee /etc/systemd/system/gunicorn.socket <<EOF

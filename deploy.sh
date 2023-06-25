@@ -20,17 +20,19 @@ sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;
 
 #change directory
 PROJECT_DIR=/home/trigger
-python3 -m venv $PROJECT_DIR/env
-source $PROJECT_DIR/env/bin/activate
+python3 -m venv env
+source env/bin/activate
 cd $PROJECT_DIR/$PROJECT_NAME
 
 # Configure Django project settings
+echo "import os" >> $PROJECT_DIR/$PROJECT_NAME/$PROJECT_NAME/settings.py
 sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = ['*']/" $PROJECT_DIR/$PROJECT_NAME/$PROJECT_NAME/settings.py
 sed -i "s/'ENGINE': 'django.db.backends.sqlite3',/'ENGINE': 'django.db.backends.postgresql_psycopg2',\n        'NAME': '$DB_NAME',\n        'USER': '$DB_USER',\n        'PASSWORD': '$DB_PASSWORD',\n   'HOST': 'localhost',\n        'PORT': '',/" $PROJECT_DIR/$PROJECT_NAME/$PROJECT_NAME/settings.py
 sed -i "/'NAME'\s*:\s*BASE_DIR\s*\/\s*'db.sqlite3',/d" $PROJECT_DIR/$PROJECT_NAME/$PROJECT_NAME/settings.py
+echo "STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')" >> $PROJECT_DIR/$PROJECT_NAME/$PROJECT_NAME/settings.py
 
 # Perform initial project setup
-python3 manage.py -r requirements.txt
+pip install -r requirements.txt
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py collectstatic --noinput

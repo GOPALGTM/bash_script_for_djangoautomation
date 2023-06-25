@@ -2,7 +2,7 @@
 
 # Read the application name as an argument
 LINUX_USER=$1
-PROJECT_NAME=$3
+PROJECT_NAME=$2
 
 # Create Nginx configuration file
 sudo tee /etc/nginx/sites-available/$PROJECT_NAME <<EOF
